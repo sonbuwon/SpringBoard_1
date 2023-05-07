@@ -13,8 +13,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerRepository;
+import com.mysite.sbb.answer.AnswerService;
 import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionRepository;
+import com.mysite.sbb.question.QuestionService;
 
 import jakarta.transaction.Transactional;
 
@@ -22,20 +24,14 @@ import jakarta.transaction.Transactional;
 class SbbApplicationTests {
 
 	@Autowired
-	private QuestionRepository questionRepository;
+	private QuestionService questionService;
 	
-	@Autowired
-    private AnswerRepository answerRepository;
-	
-	@Transactional
 	@Test
 	void jpaTest() {
-		Optional<Question> oq = this.questionRepository.findById(3);
-        assertTrue(oq.isPresent());
-        Question q = oq.get();
-        
-        List<Answer> aList = q.getAnswerList();
-        Answer a = aList.get(0);
-        assertEquals(1, a.getId());
+		for(int i=1; i<=200; i++) {
+			String subject = String.format("테스트 데이터입니다:[%03d]", i);
+            String content = "내용무";
+            this.questionService.create(subject, content);
+		}
 	}
 }
